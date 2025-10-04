@@ -1,1 +1,1 @@
-# HRSSystem
+# Human Resource System
