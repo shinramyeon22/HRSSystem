@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Loading...</h1>
+
+<script type="module">
+import { supabase } from "./supabaseClient.js";
+
+// Wait for Supabase to give user session
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+    window.location.href = "login.html";
+}
+
+const email = user.email.toLowerCase();
+
+// ROLE CHECKING
+if (email.includes("admin")) {
+    window.location.href = "admin-dashboard.html";
+} 
+else if (email.includes("hr")) {
+    window.location.href = "hr-dashboard.html";
+} 
+else {
+    window.location.href = "employee-dashboard.html";
+}
+</script>
+</body>
+</html>
