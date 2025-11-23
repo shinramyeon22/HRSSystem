@@ -1,27 +1,35 @@
-// src/App.jsx
+
 import { useState, useEffect } from 'react'
-import { supabase } from './supabaseClient' // Make sure the path is correct
+import { supabase } from './supabaseClient' 
 import './App.css'
+
 
 function App() {
   const [session, setSession] = useState(null)
 
   useEffect(() => {
-    // Check for active session on initial load
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
 
-    // Listen for changes in auth state
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
+  // ========== TEST SUPABASE CONNECTION HERE ==========
+  async function testSupabase() {
+    const { data, error } = await supabase.from("users").select("*");
+    console.log("TEST DATA:", data);
+    console.log("TEST ERROR:", error);
+  }
+  testSupabase();
+  // ===================================================
 
-    // Cleanup subscription on unmount
-    return () => subscription.unsubscribe()
-  }, [])
+  // Auth session listener
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setSession(session)
+  })
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    (_event, session) => setSession(session)
+  )
+
+  return () => subscription.unsubscribe()
+}, [])
+
 
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
