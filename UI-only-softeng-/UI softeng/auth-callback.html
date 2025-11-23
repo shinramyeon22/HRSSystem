@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Loading...</title>
+</head>
+<body>
+<script type="module">
+    import { supabase } from "./supabaseClient.js";
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        alert("Login failed.");
+        window.location.href = "login.html";
+    }
+
+    // Get role from metadata OR email pattern
+    const email = user.email.toLowerCase();
+
+    if (email.includes("admin")) {
+        window.location.href = "admin-dashboard.html";
+    } else if (email.includes("hr")) {
+        window.location.href = "hr-dashboard.html";
+    } else {
+        window.location.href = "employee-dashboard.html";
+    }
+</script>
+</body>
+</html>
