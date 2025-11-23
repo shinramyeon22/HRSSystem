@@ -28,14 +28,35 @@
             <button type="submit" class="login-btn">Sign In</button>
         </form>
 
-        <div class="divider"><span>or</span></div>
+        <div class="login-card">
+    <h1>User Portal</h1>
+    <p>Secure access to your company dashboard</p>
 
-        <button class="google-btn">
-            <img src="https://developers.google.com/identity/images/g-logo.png"
-                 alt="Google logo"
-                 class="google-logo">
-            <span>Continue with Google</span>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="e.g. john_admin" required autocomplete="username">
+            <small>Try: john_admin | jane_hr | mike_employee</small>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="login-btn">Sign In</button>
+    </form>
+
+    <div class="divider"><span>or</span></div>
+
+    <!-- ✅ Google button goes here -->
+   <button class="google-btn" id="googleLogin">
+    <img src="https://developers.google.com/identity/images/g-logo.png"
+         alt="Google logo"
+         class="google-logo">
+    <span>Continue with Google</span>
         </button>
+
     </div>
 </div>
 
@@ -55,6 +76,24 @@
         }
     });
 </script>
+<script type="module">
+import { supabase } from "./supabaseClient.js";
+
+document.getElementById("googleLogin").addEventListener("click", async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+            redirectTo: window.location.origin + "/redirect.html"
+        }
+    });
+
+    if (error) {
+        alert("Google login error: " + error.message);
+    }
+});
+</script>
+
+
 
 </body>
 </html>
